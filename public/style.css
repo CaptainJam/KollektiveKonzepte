@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+
+* {
+box-sizing: border-box;
+
+margin: 0;
+padding: 0;
+
+
+}
+
+
+body{
+background: #333;
+color: #fff;
+font-family: 'Nunito','Eastman', sans-serif;
+}
+
+
+.container {
+--cols-num: 4;
+
+display: grid;
+
+grid-template-columns: repeat( var(--cols-num), 1fr);
+grid-gap: 10px;
+
+}
+
+.container > div {
+    cursor: pointer;
+    height: 220px;
+    
+    background-size: cover;
+    /*background-attachment: fixed;*/
+   /* background-position: -400px;*/
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+   
+    text-align: center;
+    
+    position: relative;
+  top: +5%;
+    transform: translateY(-5%);
+    transition: all 0.3s ease-in;
+
+}
+
+a{
+    display: block;
+    text-decoration: none;
+}
+
+.bg1{
+    background: url(./images/BG_Names.png);
+}
+
+a{
+    color: #fff;
+}
+
+.bg1 img {
+    width: 220px;
+    
+}
+
+.bg2 {
+    background: url(./images/BG_Rooms.png);
+}
+
+.bg3 {
+    background: url(./images/BG_Draw.png);
+}
+
+.bg4 {
+    background: url(./images/BG_Letters.png);
+}
+.bg5 {
+    background: url(./images/BG_Save.png);
+}
+.bg6 {
+    background: url(./images/BG_Ellipse.png);
+}
+.bg7 {
+    background: url(./images/BG_Record.png);
+}
+.bg8 {
+    background: url(./images/BG_VizAud.png);
+}
+.bg9 {
+    background: url(./images/BG_Patterns.png);
+}
+.bg10 {
+    background: url(./images/GG_Audio_10.png);
+}
+.bg11 {
+    background: url(./images/GG_Audio_11.png);
+}
+.bg12 {
+    background: url(./images/GG_Audio_12.png);
+}
+.bg13 {
+    background: url(./images/GG_Audio_13.png);
+}
+.bg14 {
+    background: url(./images/GG_Audio_14.png);
+}
+.bg15 {
+    background: url(./images/GG_Audio_15.png);
+}
+.bg16 {
+    background: url(./images/GG_Audio_16.png);
+}
+
+.bg17 {
+    background: url(./images/GG_Audio_17png.png);
+}
+.bg18 {
+    background: url(./images/GG_Audio_18.png);
+}
+.bg20 {
+    background: url(./images/BG_Patterns.png);
+}
+
+
+
+
+
+.container > div:hover {
+    opacity: 0.7;
+    transform: scale(0.9);
+    background-position: left;
+    /*transform: translateX(-100%);*/
+}
+
+h2 {
+    font-size: 45px;
+    font-weight: 300;
+    margin: 10px;
+    
+    text-shadow:
+		-1px -1px 0 #333,
+		1px -1px 0 #333,
+		-1px 1px 0 #333,
+		1px 1px 0 #333;
+
+}
+
+h2 span {
+    font-size: 30px;
+
+}
+
+p {
+    font-size: 20px;
+    text-shadow:
+		-1px -1px 0 #333,
+		1px -1px 0 #333,
+		-1px 1px 0 #333,
+		1px 1px 0 #333;
+
+}
+
+.container > div:nth-of-type(17){
+    grid-column: 1 / 3;
+}
+/*
+.container > div:nth-of-type(6){
+    grid-column: 3 / 5;
+
+}
+
+.container > div:nth-of-type(8){
+    grid-column: 2 / 4;
+    
+}
+.container > div:nth-of-type(10){
+    grid-column: 1 / 3;
+
+}
+*/
+
+
+@media screen and (max-width: 1024px) {
+    .container{
+    --cols-num: 2;
+    }
+}
+
+
+*::-webkit-scrollbar {
+    display: none;
+  }
+
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }

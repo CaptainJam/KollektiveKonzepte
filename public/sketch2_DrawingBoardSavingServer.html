@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <title>Save Sketch</title>
+  </head>
+  <body>
+    <h1>Save Sketch</h1>
+    <script>
+      let socket = io('/sketch2'); // Connect to the correct namespace
+
+    // ...
+let countdown;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background(250,248,246);
+
+  // When a resetCanvas message is received from the server, clear the canvas
+  socket.on('resetCanvas', function() {
+
+   saveCanvas(canvas, 'CanvasSave', 'jpg');
+   background(250,248,246);
+  });
+}
+
+// Place this outside the setup() function to avoid attaching multiple event handlers
+socket.on('drawData', function(data) {
+  fill(data.color);
+  noStroke();
+  ellipse(data.x, data.y, 10, 10);
+});
+
+    </script>
+  </body>
+</html>

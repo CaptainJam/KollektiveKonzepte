@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js" integrity="sha384-so9X+WF0Di60jvaW0Q2WQrp+Tav4IHEaOcis89fXklZZ2WETGKnNXmfr2vBuo7Ip" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.min.js" integrity="sha384-tEaP9Qe9rtp+BT9GFzeoMDu8UO0yneyIuyMVl4qZKjDoWVbbaZoNGFiDoFqfhemN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.sound.min.js" integrity="sha384-Y6NjJiMufYg27zeVxnEOXs9PlsR3Koo1IS54Vq6oIp/mBFsGPsB9xW35BKD7sq+q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="styleP.css">
+    <meta charset="utf-8" />
+
+  </head>
+  <body>
+
+<button id="next-sketch">Next Sketch</button>
+
+<div id="canvas-container"></div>
+<script>
+  // Create an array to hold all the script loading promises
+  let scriptPromises = [];
+
+  // Create and load the script files
+  for (let i = 0; i <= 9; i++) {
+    let promise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = `sketch${i}.js`;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+    scriptPromises.push(promise);
+  }
+
+  // Wait for all the scripts to finish loading
+  Promise.all(scriptPromises).then(() => {
+    // Now all the scripts have loaded, we can access the start functions
+
+    // Create an array to hold all the sketch start functions
+    let sketches = [];
+
+    // Populate the array
+    for (let i = 0; i <= 9; i++) {
+      // Use the function name from the global scope
+      sketches.push(window['startSketch' + i]);
+    }
+
+    let currentSketchIndex = 0;
+    let currentSketchInstance = sketches[currentSketchIndex]();
+
+    function loadNextSketch() {
+      // Remove the current sketch
+      currentSketchInstance.remove();
+
+      // Increment the sketch index
+      currentSketchIndex = (currentSketchIndex + 1) % sketches.length;
+
+      // Start the next sketch
+      currentSketchInstance = sketches[currentSketchIndex]();
+    }
+
+    document.getElementById('next-sketch').addEventListener('click', loadNextSketch);
+
+    // Add event listener for 'Q' key press
+    window.addEventListener('keydown', function(event) {
+      if (event.key === 'Q' || event.key === 'q') {
+        loadNextSketch();
+      }
+    });
+  });
+</script>
+
+
+
+
+  
+  </body>
+</html>

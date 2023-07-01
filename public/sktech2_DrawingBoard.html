@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <link rel="stylesheet" type="text/css" href="styleDraw.css">
+    <title>Sketch</title>
+  </head>
+  <body>
+    <h1>Draw with your selected color:</h1>
+    <div id="buttons">
+<button id="color1" onclick="pickColor('rgb(248,194,165)')"></button>
+<button id="color2" onclick="pickColor('rgb(254,241,168)')"></button>
+<button id="color3" onclick="pickColor('rgb(171,224,236)')"></button>
+<button id="color4" onclick="pickColor('rgb(181,244,188)')"></button>
+<button id="color5" onclick="pickColor('rgb(254,206,236)')"></button>
+<button id="saveButton">save</button>
+</div>
+    <h2 id="timer">Next Reset: 60</h2>
+
+    <script>
+      let socket = io('/sketch2'); // Connect to the correct namespace
+      let color = 'rgb(248,194,165)'; // Default color
+
+      function pickColor(col) {
+        color = col;
+      }
+
+      // ...
+let countdown;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background(250,248,246);
+fill(248, 194, 165);
+  // When timer data is received from the server, update the countdown display
+  socket.on('timer', function(time) {
+    countdown = time;
+    document.getElementById('timer').textContent = "Next Reset: " + (countdown);
+  });
+
+  // When a resetCanvas message is received from the server, clear the canvas
+  socket.on('resetCanvas', function() {
+    background(255);
+  });
+}
+
+function draw() {
+  if (mouseIsPressed) {
+    fill(color);
+    noStroke();
+    ellipse(mouseX, mouseY, 10, 10);
+
+    // Emit the draw data to the server
+    socket.emit('drawData', {x: mouseX, y: mouseY, color: color});
+  }
+}
+
+
+
+      // When draw data is received from the server, draw it on the canvas
+      socket.on('drawData', function(data) {
+        fill(data.color);
+        noStroke();
+        ellipse(data.x, data.y, 10, 10);
+      });
+
+document.getElementById('saveButton').addEventListener('click', function() {
+saveCanvas('mySketch', 'jpg');
+});
+
+    </script>
+  </body>
+</html>

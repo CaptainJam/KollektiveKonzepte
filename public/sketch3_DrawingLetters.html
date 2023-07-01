@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <link rel="stylesheet" type="text/css" href="styleDrawL.css">
+    <title>Letter Sketch</title>
+  </head>
+  <body>
+    <h1>Place your letter:</h1>
+    <input type="text" id="letter" maxlength="1" />
+    <select id="font">
+      <option id="font1" value="Arial">Arial</option>
+      <option id="font2" value="Verdana">Verdana</option>
+      <option id="font3" value="Courier">Courier</option>
+      <option id="font4" value="Georgia">Georgia</option>
+      <option id="font5" value="Times New Roman">Times New Roman</option>
+    </select>
+    <div id="buttons">
+    <button id="color1" onclick="pickColor('rgb(248,194,165)')"></button>
+    <button id="color2" onclick="pickColor('rgb(254,241,168)')"></button>
+    <button id="color3" onclick="pickColor('rgb(171,224,236)')"></button>
+    <button id="color4" onclick="pickColor('rgb(181,244,188)')"></button>
+    <button id="color5" onclick="pickColor('rgb(254,206,236)')"></button>
+</div>
+    <h2 id="timer">30</h2>
+
+    <script>
+        let socket = io('/sketch3');
+        let color = 'rgb(248,194,165)';
+        let lastTimestamp = Date.now() - 30000;
+
+
+
+        function pickColor(col) {
+          color = col;
+        }
+        
+        function setup() {
+          let cnv = createCanvas(400, 400);
+          cnv.mouseClicked(sendLetter);
+          background(250,248,246);
+
+
+          socket.on('letterData', function(data) {
+          drawLetter(data.x, data.y, data.letter, data.font, data.color);
+        });
+
+
+          socket.on('initialData', function(data) {
+            console.log('Works');
+          data.forEach(letter => {
+            drawLetter(letter.x, letter.y, letter.letter, letter.font, letter.color);
+          });
+        });
+        }
+        
+        function sendLetter() {
+  let currentTimestamp = Date.now();
+  if (currentTimestamp - lastTimestamp < 30000) {
+    // Less than 30 seconds has passed since the last letter was placed
+    return;
+  }
+
+  lastTimestamp = currentTimestamp;
+  let letter = document.getElementById('letter').value;
+  let font = document.getElementById('font').value;
+
+  // Draw the letter locally
+  drawLetter(mouseX, mouseY, letter, font, color);
+
+  // Send the letter data to the server
+  socket.emit('letterData', {x: mouseX, y: mouseY, letter: letter, font: font, color: color});
+
+  // Start countdown
+  let timerElement = document.getElementById('timer');
+  timerElement.textContent = 30;
+  let countdown = setInterval(function() {
+    let currentTime = parseInt(timerElement.textContent);
+    if (currentTime <= 1) {
+      clearInterval(countdown);
+    } else {
+      timerElement.textContent = currentTime - 1;
+    }
+  }, 1000);
+}
+
+        
+        function drawLetter(x, y, letter, font, color) {
+          textFont(font);
+          fill(color);
+          textSize(50);
+          text(letter, x, y);
+        }
+        
+        </script>
+        
+        
+
+
+
+  </body>
+</html>

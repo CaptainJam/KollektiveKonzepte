@@ -19,7 +19,6 @@ let ballPosition;
 let gameover = false;
 
 
-
 function setup() {
     createCanvas(800, 400);
     ballPosition = width/2;
